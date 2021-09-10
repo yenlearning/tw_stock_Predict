@@ -1,0 +1,381 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!--標頭-->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模擬下單系統</title>
+
+    <!-- 導入5,0.2的Bootstrap_css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!-- 導入css檔 -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/stockPlay.css' %}" type="text/css">
+    <!-- 引入JavaScript檔 -->
+    <script type='text/javascript' src="{% static 'js/stockPlay.js' %} " defer></script>
+    <script type='text/javascript' src="{% static 'js/now_price.js' %} " defer></script>
+    <!-- 加入圖標 -->
+    <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/ico" />
+</head>
+
+<body class="bg-custom-background">
+    <!-- {% if request.session.is_login %}
+    <h1>你好,{{ request.session.username }}！歡迎回來！</h1>
+    {% endif %} -->
+    <!-- 導覽列 -->
+    <!-- 關於導覽列
+         利用Bootstrap已經寫好的功能navbar進行設定
+
+        1)justify-content為左右排版
+
+        2)align-item為上下排版
+
+        3)container為容器,類似一個櫃子的概念
+
+        4)p可以直接作為padding使用，也可以搭配方向t(top),b(bottom),l(left),r(right),還可以搭配大小xxs,xs,sm,md,lg,xl,xxl(自動抓網頁大小)做成響應式網頁,ex:p-2,pb-3,pl-sm-3
+
+        4-1)方向還有x,y可以使用,x為左右,y為上下
+
+        5)m也可以直接作為marrign使用，跟p不同的地方在於有s(start),e(end)可以使用,ex:me-auto
+
+        6)d-flex類似網格控制器可以做更詳細的排版作業
+    -->
+
+    <header class="navbar">
+        <div class="navbar navbar-expand-md">
+            <div class="container-fluid justify-content-start">
+                <a class="navbar-brand text-white" href="">
+                    <img src="../static/img/logo.png" alt="" width="30" height="24"
+                        class="d-inline-block align-text-top">
+                    股市先知
+                </a>
+
+                <div class="navbar-collapse">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link text-custom-headline goToMain" aria-current="page"
+                                href="#"><b>股票預測</b></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-custom-headline" href=""><b>模擬下單</b></a>
+                        </li>
+                    </ul>
+                </div>
+
+                <form class="d-flex" method="GET" action="/search/">
+                    <input class="form-control me-2" type="search" placeholder="Search..." aria-label="Search"
+                        name='search' required>
+                    <button class="btn text-custom-headline btnSearch" type="submit"><b>搜尋</b></button>
+                </form>
+
+                <div class="text-end ms-3">
+                    <form action="/logout/" method="POST">
+                        {% csrf_token %}
+                        <button class="btn text-custom-headline btnLogout" type="submit"><b>登出</b></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ----------------------------------------------------------------------------------------------- -->
+    <div class="container d-flex flex-wrap p-3" style="margin-top:5rem">
+        <div class="col m-2 p-lg-2 ">
+            <div class="card border border-dark ">
+                <div class="card-body bg-custom-paragraph text-white p-2 ">
+                    <h5 class="card-title "><b>股票選擇</b></h5>
+                </div>
+
+                <div class="d-inline p-2 bg-custom-paragraph wisdom">
+                    <a style="text-decoration:none;" href="/stockPlay/?stock_id=2330">
+                        <button
+                            class="btn p-lg-2 p-sm-0 bg-custom-unimportent text-white d-inline bd-custom-unimportent btn2330">
+                            台積電2330
+                        </button>
+                    </a>
+                    <a style="text-decoration:none;" href="/stockPlay/?stock_id=2454">
+                        <button
+                            class="btn p-lg-2 p-sm-0 bg-custom-unimportent text-white d-inline bd-custom-unimportent btn2454">
+                            聯發科2454
+                        </button>
+                    </a>
+                    <a style="text-decoration:none;" href="/stockPlay/?stock_id=2317">
+                        <button
+                            class="btn p-lg-2 p-sm-0 bg-custom-unimportent text-white d-inline bd-custom-unimportent btn2317">
+                            鴻海2317
+                        </button>
+                    </a>
+                    <a style="text-decoration:none;" href="/stockPlay/?stock_id=2303">
+                        <button
+                            class="btn p-lg-2 p-sm-0 bg-custom-unimportent text-white d-inline bd-custom-unimportent btn2303">
+                            台達電2303
+                        </button>
+                    </a>
+                    <a style="text-decoration:none;" href="/stockPlay/?stock_id=2308">
+                        <button
+                            class="btn p-lg-2 p-sm-0 bg-custom-unimportent text-white d-inline bd-custom-unimportent btn2308">
+                            富邦金2308
+                        </button>
+                    </a>
+                    <a style="text-decoration:none;" href="/stockPlay/?stock_id=2881">
+                        <button
+                            class="btn p-lg-2 p-sm-0 bg-custom-unimportent text-white d-inline bd-custom-unimportent btn2881">
+                            台塑2881
+                        </button>
+                    </a>
+                    <a style="text-decoration:none;" href="/stockPlay/?stock_id=1301">
+                        <button
+                            class="btn p-lg-2 p-sm-0 bg-custom-unimportent text-white d-inline bd-custom-unimportent btn1301">
+                            南亞1301
+                        </button>
+                    </a>
+                    <a style="text-decoration:none;" href="/stockPlay/?stock_id=1303">
+                        <button
+                            class="btn p-lg-2 p-sm-0 bg-custom-unimportent text-white d-inline bd-custom-unimportent btn1303">
+                            國泰金1303
+                        </button>
+                    </a>
+                    <a style="text-decoration:none;" href="/stockPlay/?stock_id=2882">
+                        <button
+                            class="btn p-lg-2 p-sm-0 bg-custom-unimportent text-white d-inline bd-custom-unimportent btn2882">
+                            中鋼2882
+                        </button>
+                    </a>
+                    <a style="text-decoration:none;" href="/stockPlay/?stock_id=2412">
+                        <button
+                            class="btn p-lg-2 p-sm-0 bg-custom-unimportent text-white d-inline bd-custom-unimportent btn2412">
+                            中華電2414
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ----------------------------------------------------------------------------------------------- -->
+
+    <!-- 導覽列以下 -->
+    <div class="container mt-3 container2" >
+        <div class="row" >
+            <!-- 左區塊 -->
+            <div class="col-2 ">
+                <!-- 會員資料區 -->
+                <div class="userArea ps-2 pt-2 pb-2 mb-4">
+                    您好 , <span id="username">{{ request.session.username }}</span> 會員<br>
+                    餘額 : <span class='balance text-warning'>{{ deposit }}</span> 虛擬幣
+                </div>
+
+                <!-- 及時股價 -->
+                <div class="myPrice textArea" style="height: 10%;">
+                    <h5>{{stock_id}}及時股價</h5>
+                    <ul>
+                        <li class="text-custom-secondary now_price">0.00元</li>
+                    </ul>
+                </div>
+                <!-- 庫存 -->
+                <div class="myBank textArea " id="myBank">
+                    <h5 id="bank">庫存</h5>
+                    <table id="warehouse">
+                        <tr>
+                            <th>股數</th>
+                            <th>買進股價</th>
+                            <!-- 放庫存的東西 -->
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- 各種排行 -->
+                <!-- <div class="concition list-group">
+                    <a href="#" class="list-group-item list-group-item-action active">成量排行</a>
+                    <a href="#" class="list-group-item list-group-item-action">買氣強大</a>
+                    <a href="#" class="list-group-item list-group-item-action">賣壓沉重</a>
+                    <a href="#" class="list-group-item list-group-item-action">單量排行</a>
+                    <a href="#" class="list-group-item list-group-item-action">量增排行</a>
+                    <a href="#" class="list-group-item list-group-item-action">開盤強勢</a>
+
+                </div> -->
+
+                <!-- 小插圖 -->
+                
+            </div>
+
+            <!-- 中區塊 -->
+            <div class="col-8">
+                <!-- 股票圖區 -->
+                <div class="picArea">
+
+                    <button class="tablink" onclick="openPage('Home', this, 'rgb(127, 90, 240)')"
+                        id="defaultOpen">技術線型</button>
+                    <!-- <button class="tablink" onclick="openPage('News', this, 'rgb(127, 90, 240)')">KD線</button> -->
+                    <button class="tablink" onclick="openPage('Contact', this, 'rgb(127, 90, 240)')">成交量</button>
+                    <button class="tablink" onclick="openPage('About', this, 'rgb(127, 90, 240)')">布林軌道線</button>
+
+                    <div id="Home" class="tabcontent">
+                        <!-- <img src="../static/img/none_pic.png" alt="技術分析圖"> -->
+                        <div id='Kpic'></div>
+                    </div>
+
+                    <!-- <div id="News" class="tabcontent">
+                       
+                    </div> -->
+
+                    <div id="Contact" class="tabcontent">
+                        <!-- <img src="../static/img/none_pic.png" alt="成交量圖"> -->
+                        <div id='Volume'></div>
+                    </div>
+
+                    <div id="About" class="tabcontent">
+                        <!-- <img src="../static/img/none_pic.png" alt="布林軌道圖"> -->
+                        <div id='Bollin'></div>
+                    </div>
+                </div>
+                <!-- <a href="#" class="btn btn-primary btn-lg active mt-2" role="button" aria-pressed="true"
+                    data-toggle="modal" data-target="#exampleModalCenter">下單</a> -->
+                <!-- 新聞區 -->
+                <!-- <div class='newsArea mt-3'>
+                    <h3 style="color: white;">個股熱門新聞</h3>
+                    <div class="list-group">
+                        <a href="#" class="news list-group-item list-group-item-action active"> 新聞一</a>
+                        <a href="#" class="news list-group-item list-group-item-action">新聞二</a>
+                        <a href="#" class="news list-group-item list-group-item-action">新聞三</a>
+                        <a href="#" class="news list-group-item list-group-item-action">新聞四</a>
+                        <a href="#" class="news list-group-item list-group-item-action">新聞五</a>
+                    </div>
+                </div> -->
+            </div>
+
+
+            <!-- 右區塊 -->
+            <div class="col-2">
+                <!-- <div class="userArea">
+                    <p class="">您好<span id="username">{{ request.session.username }}</span> 會員</p>
+                    <p>餘額 : <span class='balance'>{{ deposit }}</span>虛擬幣</p>
+                </div> -->
+
+                <div class="myLove textArea">
+                    <h5 id="love">目前收益</h5>
+                    <table id="income">
+                        <tr>
+                            <th style="width: 50px">個股ID</th>
+                            <th>總收益金額</th>
+                            <!-- 放庫存的東西 -->
+                        </tr>
+                    </table>
+                    <!-- <img class="illustration2 mb-0 mt-2" src="../static/img/illustration2.png" style="width: 80%; bottom: 10px;" alt="插圖2"> -->
+                </div>
+                <a href="#" class="btn btn-primary btn-lg active mt-3" role="button" aria-pressed="true"
+                    data-toggle="modal" data-target="#exampleModalCenter">《下單》</a>
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- 下單模組區 -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content bg-custom-background text-custom-headline">
+                <!-- 下單用表單 -->
+                <form action="/buy/" method="POST">
+                    {% csrf_token %}
+                    <div class="modal-header bd-custom-unimportent">
+                        <h5 class="modal-title" id="exampleModalCenterTitle">
+                            <b>商品: </b>
+                            <b id="get_stock_id">{{ stock_id }}</b>
+                        </h5>
+                    </div>
+                    <!-- POST 股票ID -->
+                    <input type="hidden" name="stock_id" id="post_stock_id">
+                    <div class="modal-body">
+                        <div class="p-1">
+                            <label>現存餘額：</label>
+                            <span class="text-warning">{{ deposit }}</span> 元
+                        </div>
+                        <div class="p-1">
+                            <label>交易：</label>
+                            <!-- POST 1股 還是 1000股 -->
+                            <input type="radio" id="radio1" name="one_or_all" value='1' checked="checked">
+                            <label for="radio1">零股</label>
+                            <input type="radio" id="radio2" name="one_or_all" value='1000'>
+                            <label for="radio2">整股</label>
+                        </div>
+                        <div class="p-1">
+                            <label>數量：</label>
+                            <!-- POST張數 -->
+                            <input type="number" id="quantity" name="quantity" min="1" value="1" style="width: 60px;">
+                        </div>
+                        <div class="p-1">
+                            <label>買賣：</label>
+                            <!-- POST 買進 還是 賣出 -->
+                            <input type="radio" id="radio1" name="trade" value="buy" checked="checked">
+                            <label for="radio1">買進</label>
+                            <input type="radio" id="radio2" name="trade" value="sell">
+                            <label for="radio2">賣出</label>
+                        </div>
+                        <div class="p-1">
+                            <label>價格：</label>
+                            <!-- POST 及時價格 -->
+                            <input type="number" step="0.01" id='now_price' name='now_price' style="width: 100px;" readonly="readonly"> 元
+                        </div>
+                        <!-- <div class="d-flex flex-row p-2">
+                            <div class="column me-2 bg-custom-paragraph">
+                                <h3>買進</h3>
+                                <hr>
+                                <p class="text-custom-secondary">一些文字</p>
+                            </div>
+                            <div class="column me-2 bg-custom-paragraph">
+                                <h3>賣出</h3>
+                                <hr>
+                                <p class="text-custom-secondary">一些文字</p>
+                            </div>
+                        </div> -->
+                    </div>
+                    <div class="modal-footer bd-custom-unimportent">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                        <!-- POST 提交按鈕 -->
+                        <button type="submit" class="btn btn-danger text-white">下單</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+
+    <script>
+        function openPage(pageName, elmnt, color) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablink");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].style.backgroundColor = "";
+            }
+            document.getElementById(pageName).style.display = "block";
+            elmnt.style.backgroundColor = color;
+        }
+
+        // Get the element with id="defaultOpen" and click on it
+        document.getElementById("defaultOpen").click();
+    </script>
+</body>
+
+</html>

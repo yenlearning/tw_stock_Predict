@@ -1,0 +1,180 @@
+/* 導覽列 */
+
+.navbar-brand {
+    margin-left: 7%;
+}
+
+.navbar {
+    position: fixed;
+    z-index: 10;
+    top: 0%;
+    width: 100%;
+    background-color: rgb(127, 90, 240);
+    font-weight: bold;
+}
+
+.text-end {
+    margin-right: 7%;
+}
+
+/* 設定導覽列永遠在最上方 */
+
+@media screen and (max-width: 390px) {
+    .marginTop {
+        margin-top: 7rem;
+    }
+}
+
+@media screen and (max-width: 815px) {
+    .text-end {
+        margin-right: 0%;
+    }
+    .navbar-brand {
+        margin-left: 5%;
+    }
+}
+
+.marginTop {
+    margin-top: 5rem;
+}
+
+/* 設定按鈕 */
+
+button {
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: rgb(127, 214, 255);
+}
+
+.btn:active, .btn:focus, .btn.active {
+    background-image: none;
+    outline: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.btnSearch {
+    background-color: rgb(127, 90, 240);
+    width: 80px;
+}
+
+.btnLogout {
+    background-color: rgb(127, 90, 240);
+}
+
+/* 股票分析圖區 */
+
+.picArea {
+    box-sizing: border-box;
+    /* height: 50%; */
+    margin: 0;
+}
+
+.tablink {
+    background-color: rgb(54, 57, 63);
+    color: white;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    font-size: 17px;
+    width: 50%;
+}
+
+.tablink:hover {
+    background-color: rgb(127, 214, 255);
+}
+
+/* 圖表區 */
+
+.tabcontent {
+    color: white;
+    display: none;
+    padding: 50px 20px;
+    height: 600px;
+}
+
+/* 自訂顏色class */
+
+/* bg(background)區 */
+
+.bg-custom-paragraph {
+    background-color: rgb(22, 22, 26);
+}
+
+.bg-custom-background {
+    background-color: rgb(36, 38, 41);
+}
+
+.bg-custom-importent {
+    background-color: rgb(127, 90, 240);
+}
+
+.bg-custom-unimportent {
+    background-color: rgb(54, 57, 63);
+}
+
+/* bd(border)區 */
+
+.bd-custom-paragraph {
+    border-color: rgb(22, 22, 26);
+}
+
+.bd-custom-importent {
+    border-color: rgb(127, 90, 240);
+}
+
+.bd-custom-unimportent {
+    border-color: rgb(54, 57, 63);
+}
+
+/* text區*/
+
+.text-custom-headline {
+    color: rgb(255, 255, 254);
+}
+
+.text-custom-secondary {
+    color: rgb(148, 161, 178);
+}
+
+.tabcontent #History_pic {
+    margin-top: 0%;
+    height: 100%;
+    width: 100%;
+    background-image: url(../img/none_pic.png);
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.tabcontent #Prophet_pic {
+    margin-top: 0%;
+    height: 100%;
+    width: 100%;
+    background-image: url(../img/none_pic.png);
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.container{
+    max-width: 1450px!important;
+}
+
+.middleArea{
+    height: 121%;
+    width: 80%;
+}
+
+.card{
+    border: rgb(22, 22, 26)!important;
+}
+
+.wisdom button{
+    padding: 6px 1.6% !important;
+    margin: 0 0.25% 1% 0.25%;
+}

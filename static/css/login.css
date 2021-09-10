@@ -1,0 +1,98 @@
+/* 導覽列 */
+.navbar-brand {
+    margin-left: 7%;
+}
+
+.navbar {
+    position: fixed;
+    z-index: 10;
+    top: 0%;
+    width: 100%;
+    background-color: rgb(127, 90, 240);
+    font-weight: bold;
+}
+
+.mb-3 {
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
+
+/* 表單區上方間隔 */
+.form_area{
+    margin-top: 6rem;
+}
+
+/* 表格文字 */
+.container{
+    color: white;
+}
+
+hr{
+    background-color: white;
+}
+
+/* 用戶檢查提示字 */
+#usernameHelp {
+    display: inline;
+}
+
+/* 廣告圖 */
+
+.advertise {
+    z-index: 10;
+    top: 7.8%;
+    width: 50%;
+    height: 100%;
+    position: fixed;
+    background-image: url("../img/ad.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.leftAd {
+    background-position: right;
+}
+
+.rightAd {
+    background-position: left;
+    left: 50%;
+}
+
+/* 按鈕 */
+.btn-primary, .btn-primary:hover:active {
+    background-color: rgb(127, 90, 240);
+    border-color: rgb(127, 90, 240);
+}
+
+/* 帳號重複提示字 */
+#usernameHelp{
+    color: red;
+}
+
+/* 響應式調整 */
+
+@media screen and (max-width: 768px) {
+  .advertise{
+    width: 0%;
+  }
+  .signup_form{
+    display: none;
+  }
+}
+
+/*  */
+
+.bg-custom-background {
+    background-color: rgb(36, 38, 41);
+}
+
+
+/* 未用註解 */
+/* .login_form{
+    background-color: aqua;
+}
+
+.signup_form{
+    background-color:deeppink;
+} */

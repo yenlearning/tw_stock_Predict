@@ -1,0 +1,266 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!--標頭-->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>股票先知 登入</title>
+
+    <!-- 導入5,0.2的Bootstrap_css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!-- 關於bootstrap
+         Bootstrap是一個套件，裡頭已經寫好大量的css，還有排版可供使用
+    -->
+
+    <!-- 導入css檔 -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/login.css' %}" type="text/css">
+    <!-- 引入JavaScript檔 -->
+    
+    <!-- 加入圖標 -->
+    <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/ico" />
+</head>
+
+<body class="bg-custom-background">
+    <!-- 傳註冊成功訊息用 -->
+    {% if massage %}
+    <div id="massage"></div>
+    {% endif %}
+    <!-- 導覽列 -->
+    <!-- 關於導覽列 
+         利用Bootstrap已經寫好的功能navbar進行設定
+
+        1)justify-content為左右排版
+
+        2)align-item為上下排版
+
+        3)container為容器，類似一個櫃子的概念
+    -->
+
+    <header class="navbar">
+        <div class="navbar navbar-expand-md">
+            <div class="container-fluid justify-content-start">
+                <a class="navbar-brand text-white" href="#">
+                    <img src="../static/img/logo.png" alt="" width="30" height="24"
+                        class="d-inline-block align-text-top">
+                    股市先知
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 登入及註冊表單 -->
+    <!-- 登入區 -->
+    <div class="container form_area">
+        <div class="row align-items-center">
+            <div class="col-md login_form">
+
+                <form action="/login/" method="POST">
+                    <!-- 資安防護 -->
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <h2>登入</h2>
+                    </div>
+                    <div class="mb-3">
+                        <label for="username1" class="form-label first_label">帳號</label>
+                        <input type="text" class="form-control" id="username1" name="username1" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password1" class="form-label">密碼</label>
+                        <input type="password" class="form-control" id="password1" name="password1" required>
+                    </div>
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-primary">登入</button>
+                    </div>
+                </form>
+                <!-- 切換按鈕 -->
+                <div class="mb-3">
+                    <hr>
+                    <label for="signup_area" class="form-label">還沒註冊會員?趕快加入我們吧!</label>
+                    <button type="button" onclick="ShowSignup()" class="btn btn-primary">前往註冊頁面</button>
+                </div>
+            </div>
+            <!-- 註冊區 -->
+            <div class="col-md signup_form">
+                <form action="/signup/" method="POST" onsubmit="return FinalCheck();">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <h2>註冊</h2>
+                    </div>
+                    <div class="mb-3">
+                        <label for="username2" class="form-label">帳號</label>
+                        <span id="usernameHelp" class="form-text" style="display: none;">《此帳戶已註冊》</span>
+                        <input type="text" class="form-control" id="username2" name="username2"
+                            aria-describedby="usernameHelp" onblur="CheckUser()" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password2" class="form-label">密碼</label>
+                        <input type="password" class="form-control" id="password2" name="password2" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password_check" class="form-label">確認密碼</label>
+                        <input type="password" class="form-control" id="password_check" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">信箱</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="exampleCheck1" required>
+                        <label class="form-check-label" for="exampleCheck1">
+                            註冊前請詳閱會員服務條款>
+                            如您登入會員，即視為您已暸解並同意此條款
+                        </label>
+                    </div>
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-primary">註冊</button>
+                    </div>
+                </form>
+                <!-- 切換按鈕 -->
+                <div class="mb-3">
+                    <hr>
+                    <label for="login_area" class="form-label">已有會員?趕快登入吧 !</label>
+                    <button type="button" onclick="ShowLogin()" class="btn btn-primary">前往登入頁面</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 廣告圖及QRcode -->
+    <span class="advertise leftAd" style="display:none"></span>
+    <span class="advertise rightAd"></span>
+
+
+
+    <!-- 導入Bootstrap_js -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+
+    <script>
+        // 偵測現在螢幕大小
+        var width = $(window).width();
+        var screen1 = "";
+        if (width >= 768)
+            screen1 = "電腦版"
+        else
+            screen1 = "手機版"
+
+        // 網頁初始 左邊的廣告圖會隱藏
+        // $('.leftAd').hide();
+        function ShowSignup() {
+            var adWidth = $(".advertise").width();
+            if (adWidth == 0) {
+                // console.log("手機版")
+                $('.login_form').hide();
+                $('.signup_form').show();
+            }
+            else {
+                // console.log("電腦版")
+                $('.leftAd').fadeTo(500, 1);
+                $('.leftAd').show();
+                $('.rightAd').fadeTo(500, 0);
+                $('.rightAd').hide();
+            }
+        }
+        function ShowLogin() {
+            var adWidth = $(".advertise").width();
+            if (adWidth == 0) {
+                // console.log("手機版")
+                $('.login_form').show();
+                $('.signup_form').hide();
+            }
+            else {
+                // console.log("電腦版")
+                $('.rightAd').fadeTo(500, 1);
+                $('.rightAd').show();
+                $('.leftAd').fadeTo(500, 0);
+                $('.leftAd').hide();
+            }
+        }
+        // 針對不正常操作視窗大小的例外處理
+        var screen2 = "";
+        window.onresize = function () {
+            var width = $(this).width();
+            if (width >= 768)
+                screen2 = "電腦版"
+            else
+                screen2 = "手機版"
+
+            if (screen1 != screen2)
+                window.location.reload();
+        }
+        //當username欄位被改變了 就觸發CheckUser()
+        function CheckUser() {
+            var csrf = $('input[name="csrfmiddlewaretoken"]').val();
+            var username = $("#username2").val();
+            console.log(csrf, username);
+            $.ajax({
+                type: 'POST',
+                url: '/CheckSignUp/',
+                // data: JSON.stringify(username2),
+                data: {
+                    csrfmiddlewaretoken: csrf,
+                    username: username
+                },
+                //contentType: "application/json",
+                // dataType: 'application/json; charset=utf-8',
+
+                //接收server端的回饋訊息result
+                success: function (result) {
+                    console.log(result);
+                    if (result == "此帳號已被註冊過") {
+                        // alert(result.check);
+                        $('#usernameHelp').show();
+                        $('#username2').focus();
+                    } else {
+                        $('#usernameHelp').hide();
+                        // alert(result.check);
+                    }
+                },
+                error: function (result) {
+                    console.log("回饋失敗");
+                }
+            })
+        }
+        // 最後檢查帳號有沒有通過
+        function FinalCheck() {
+            //代表沒通過
+            if ($("#usernameHelp").is(":visible")) {
+                alert('用戶已註冊過');
+                // $('#username2').focus();
+                return false;
+            } else if ($("#password2").val() != $("#password_check").val()) {
+                alert('密碼確認輸入錯誤');
+                return false;
+            } else
+                return true;
+        }
+
+        //註冊成功回傳message回來 message物件存在就會觸發
+        if (document.getElementById("massage")) {
+            alert("註冊成功")
+        }
+
+    </script>
+</body>
+<!--未用註解區-->
+
+<!-- 導入4.1.3的Bootstrap_css
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+      integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+-->
+
+</html>

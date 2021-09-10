@@ -1,0 +1,321 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!--標頭-->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>股票先知</title>
+
+    <!-- 導入5,0.2的Bootstrap_css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <!-- 關於Bootstrap
+         Bootstrap是一個套件，裡頭已經寫好大量的css，還有排版可供使用
+    -->
+
+    <!-- 導入css檔 -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/main.css' %}" type="text/css">
+    <!-- 引入JavaScript檔 -->
+    <script type='text/javascript' src="{% static 'js/main.js' %} " defer></script>
+    <script type='text/javascript' src="{% static 'js/now_price.js' %} " defer></script>
+    <!-- 加入圖標 -->
+    <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/ico" />
+</head>
+
+<body class="bg-custom-background">
+    <!-- <h1 style="display: none;">{{stock_id}} </h1> -->
+    <!-- 導覽列 -->
+    <!-- 關於導覽列
+         利用Bootstrap已經寫好的功能navbar進行設定
+
+        1)justify-content為左右排版
+
+        2)align-item為上下排版
+
+        3)container為容器,類似一個櫃子的概念
+
+        4)p可以直接作為padding使用，也可以搭配方向t(top),b(bottom),l(left),r(right),還可以搭配大小xxs,xs,sm,md,lg,xl,xxl(自動抓網頁大小)做成響應式網頁,ex:p-2,pb-3,pl-sm-3
+
+        4-1)方向還有x,y可以使用,x為左右,y為上下
+
+        5)m也可以直接作為marrign使用，跟p不同的地方在於有s(start),e(end)可以使用,ex:me-auto
+
+        6)d-flex類似網格控制器可以做更詳細的排版作業
+    -->
+
+    <header class="navbar">
+        <div class="navbar navbar-expand-md">
+            <div class="container-fluid justify-content-start">
+                <a class="navbar-brand text-white" href="">
+                    <img src="../static/img/logo.png" alt="" width="30" height="24"
+                        class="d-inline-block align-text-top">
+                    股市先知
+                </a>
+
+                <div class="navbar-collapse">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link text-custom-headline" aria-current="page" href=""><b>股票預測</b></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-custom-headline" href="/stockPlay/?stock_id=2330"><b>模擬下單</b></a>
+                        </li>
+                    </ul>
+                </div>
+
+                <form class="d-flex" method="GET" action="/main_search/">
+                    <input class="form-control me-2" type="search" placeholder="Search..." aria-label="Search"
+                        name='search' required>
+                    <button class="btn text-custom-headline btnSearch" type="submit"><b>搜尋</b></button>
+                </form>
+
+                <div class="text-end ms-3">
+                    <form action="/logout/" method="POST">
+                        {% csrf_token %}
+                        <button class="btn text-custom-headline btnLogout" type="submit"><b>登出</b></button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- 主頁面 -->
+    <div class="d-flex flex-column">
+        <!-- {% if request.session.is_login %}
+        <p style="color: white;">你好,{{ request.session.username }}！歡迎回來！</p>
+        <p style="color: white;">現在的頁面為個股{{stock_id}}的股票預測</p>
+        {% endif %} -->
+        <!-- 智慧選股 & 我的最愛 -->
+        <!-- 關於 智慧選股&我的最愛
+         利用d-flex進行排版,以及使用自定的顏色
+
+        1)d是指display的意思
+
+        2)flex-column將flex裡做成column(行)形式,所以row(列)也行
+        -->
+
+        <div class="container d-flex flex-wrap p-3 marginTop">
+            <div class="col m-2 p-lg-2 ">
+                <div class="card border border-dark ">
+                    <div class="card-body bg-custom-paragraph text-white p-2 ">
+                        <h5 class="card-title "><b>股票選擇</b></h5>
+                    </div>
+
+                    <div class="d-inline p-2 bg-custom-paragraph wisdom">
+                        <a style="text-decoration:none;" href="/main/?stock_id=2330">
+                            <button
+                                class="btn p-lg-2 p-sm-0 bg-custom-unimportent text-white d-inline bd-custom-unimportent btn2330">
+                                台積電2330
+                            </button>
+                        </a>
+                        <a style="text-decoration:none;" href="/main/?stock_id=2454">
+                            <button
+                                class="btn p-lg-2 p-sm-0 bg-custom-unimportent text-white d-inline bd-custom-unimportent btn2454">
+                                聯發科2454
+                            </button>
+                        </a>
+                        <a style="text-decoration:none;" href="/main/?stock_id=2317">
+                            <button
+                                class="btn p-lg-2 p-sm-0 bg-custom-unimportent text-white d-inline bd-custom-unimportent btn2317">
+                                鴻海2317
+
+                            </button>
+                        </a>
+                        <a style="text-decoration:none;" href="/main/?stock_id=2303">
+                            <button
+                                class="btn p-lg-2 p-sm-0 bg-custom-unimportent text-white d-inline bd-custom-unimportent btn2303">
+                                台達電2303
+                            </button>
+                        </a>
+                        <a style="text-decoration:none;" href="/main/?stock_id=2308">
+                            <button
+                                class="btn p-lg-2 p-sm-0 bg-custom-unimportent text-white d-inline bd-custom-unimportent btn2308">
+                                富邦金2308
+                            </button>
+                        </a>
+                        <a style="text-decoration:none;" href="/main/?stock_id=2881">
+                            <button
+                                class="btn p-lg-2 p-sm-0 bg-custom-unimportent text-white d-inline bd-custom-unimportent btn2881">
+                                台塑2881
+                            </button>
+                        </a>
+                        <a style="text-decoration:none;" href="/main/?stock_id=1301">
+                            <button
+                                class="btn p-lg-2 p-sm-0 bg-custom-unimportent text-white d-inline bd-custom-unimportent btn1301">
+                                南亞1301
+                            </button>
+                        </a>
+                        <a style="text-decoration:none;" href="/main/?stock_id=1303">
+                            <button
+                                class="btn p-lg-2 p-sm-0 bg-custom-unimportent text-white d-inline bd-custom-unimportent btn1303">
+                                國泰金1303
+                            </button>
+                        </a>
+                        <a style="text-decoration:none;" href="/main/?stock_id=2882">
+                            <button
+                                class="btn p-lg-2 p-sm-0 bg-custom-unimportent text-white d-inline bd-custom-unimportent btn2882">
+                                中鋼2882
+                            </button>
+                        </a>
+                        <a style="text-decoration:none;" href="/main/?stock_id=2412">
+                            <button
+                                class="btn p-lg-2 p-sm-0 bg-custom-unimportent text-white d-inline bd-custom-unimportent btn2412">
+                                中華電2414
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 推薦理由 & 股價圖 & 未來股價 -->
+        <div class="container d-flex flex-wrap p-3 border border-dark" style="height:600px;">
+            <!-- 推薦理由 & LineQRcode -->
+            <!-- 關於推薦理由 & LineQRcode
+                 也使用了d-flex進行排版
+
+                1)使用me-auto進行排版
+
+                2)col-12 代表這一行有著12格,每一個row最多放12個col，多的會被斷行
+
+                3)h代表height,所以也有width
+
+                4)alert是一種bootstrap裡預設好的框架
+            -->
+
+            <div class="d-flex p-3 align-items-start flex-column col-2 flex-fill">
+                <div class="col-12 alert bg-custom-paragraph text-white me-auto pb-1" role="alert">
+                    <h4 class="alert-heading"><b><span id='get_stock_id' >{{stock_id}}</span>即時股價</b></h4>
+                    <ul>
+                        <li class="text-custom-secondary now_price">0.00元</li>
+                    </ul>
+                </div>
+
+                <div class="col-12 alert bg-custom-paragraph text-white me-auto" role="alert">
+                    <h4 class="alert-heading"><b><span id='get_stock_id' >{{stock_id}}</span>推薦理由</b></h4>
+                    <ul>
+                        <li class="text-custom-secondary reason1">第一個理由</li>
+                        <li class="text-custom-secondary reason2">第二個理由</li>
+                    </ul>
+                </div>
+
+                <div class="col-12 alert bg-custom-paragraph text-white h-30" role="alert">
+                    <h4 class="alert-heading"><b>Line QRcode</b></h4>
+                    <ul>
+                        <img class='ms-3' style="width: 60%;" src="../static/img/QRcode.png" alt="LINE BOT">
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 股價圖 -->
+            <!-- 關於股價圖
+                使用nav-tabs進行設計,可以切圖
+
+                1)nav-tab為預設框架
+            -->
+
+            <div class="d-flex me-auto middleArea col-7 ">
+                <div class="container p-0 bg-custom-paragraph">
+                    <!-- 股票圖區 -->
+                    <div class="picArea">
+
+                        <button class="tablink" onclick="openPage('Home', this, 'rgb(127, 90, 240)')" id="defaultOpen">
+                            歷史圖
+                        </button>
+                        <!-- 新增future_price()函式 -->
+                        <button class="tablink"
+                            onclick="openPage('Contact', this, 'rgb(127, 90, 240)');future_price()">預測圖</button>
+
+
+                        <div class='p-3'>
+                            <div id="Home" class="tabcontent">
+                                <!-- <img src="../static/img/none_pic.png" alt="歷史圖"> -->
+                                <div id='History_pic'></div>
+                            </div>
+
+                            <div id="Contact" class="tabcontent">
+                                <!-- <img src="../static/img/none_pic.png" alt="預測圖"> -->
+                                <div id='Prophet_pic'></div>
+                            </div>
+
+                            <div id="About" class="tabcontent">
+                                <!-- <img src="../static/img/none_pic.png" alt="布林軌道圖"> -->
+                                <div id='Bollin'></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 未來股價 & 區間 -->
+                <!-- 關於未來股價 & 區間
+                與推薦理由使用相同的技術
+                    -->
+
+                <div class="d-flex p-3 flex-column col-3  flex-fill">
+                    <div class="col-12 alert bg-custom-paragraph text-white" role="alert">
+                        <h4 class="alert-heading"><b>未來股價</b></h4>
+                        <ul id="future_price">
+                            <li class="text-custom-secondary predict1">Day 1: </li>
+                            <li class="text-custom-secondary predict2">Day 2: </li>
+                            <li class="text-custom-secondary predict3">Day 3: </li>
+                            <li class="text-custom-secondary predict4">Day 4: </li>
+                            <li class="text-custom-secondary predict5">Day 5: </li>
+                            <li class="text-custom-secondary predict6">Day 6: </li>
+                            <li class="text-custom-secondary predict7">Day 7: </li>
+                            <li class="text-custom-secondary predict8">Day 8: </li>
+                            <li class="text-custom-secondary predict9">Day 9: </li>
+                            <li class="text-custom-secondary predict10">Day 10: </li>
+                        </ul>
+                    </div>
+
+                    <div class="col-12 alert bg-custom-paragraph text-white flex-fill" role="alert">
+                        <h4 class="alert-heading"><b>區間</b></h4>
+                        <ul id="future_range">
+                            <li class="text-custom-secondary range1">xxx</li>
+                            <li class="text-custom-secondary range2">xxx</li>
+                            <li class="text-custom-secondary range3">xxx</li>
+                            <li class="text-custom-secondary range4">xxx</li>
+                            <li class="text-custom-secondary range5">xxx</li>
+                            <li class="text-custom-secondary range6">xxx</li>
+                            <li class="text-custom-secondary range7">xxx</li>
+                            <li class="text-custom-secondary range8">xxx</li>
+                            <li class="text-custom-secondary range9">xxx</li>
+                            <li class="text-custom-secondary range10">xxx</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function openPage(pageName, elmnt, color) {
+                var i, tabcontent, tablinks;
+                tabcontent = document.getElementsByClassName("tabcontent");
+                for (i = 0; i < tabcontent.length; i++) {
+                    tabcontent[i].style.display = "none";
+                }
+                tablinks = document.getElementsByClassName("tablink");
+                for (i = 0; i < tablinks.length; i++) {
+                    tablinks[i].style.backgroundColor = "";
+                }
+                document.getElementById(pageName).style.display = "block";
+                elmnt.style.backgroundColor = color;
+            }
+
+            // Get the element with id="defaultOpen" and click on it
+            document.getElementById("defaultOpen").click();
+        </script>
+
+</body>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+    crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+</html>
